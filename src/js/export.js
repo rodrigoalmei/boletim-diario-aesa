@@ -6,12 +6,36 @@ function getFileBase(data) {
 
 async function renderCanvas(element) {
   if (!window.html2canvas) throw new Error("Biblioteca html2canvas não carregada.");
-  return window.html2canvas(element, {
-    backgroundColor: "#ffffff",
-    scale: 2,
-    useCORS: true,
-    logging: false
-  });
+  const clone = element.cloneNode(true);
+  clone.removeAttribute("id");
+  clone.classList.add("bulletin-export");
+  clone.style.transform = "none";
+  clone.style.position = "static";
+  clone.style.width = "794px";
+  clone.style.minHeight = "1122px";
+
+  const host = document.createElement("div");
+  host.style.background = "#ffffff";
+  host.style.left = "-10000px";
+  host.style.position = "fixed";
+  host.style.top = "0";
+  host.style.width = "794px";
+  host.style.zIndex = "-1";
+  host.appendChild(clone);
+  document.body.appendChild(host);
+
+  try {
+    return await window.html2canvas(clone, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      windowWidth: 794,
+      windowHeight: Math.max(1122, clone.scrollHeight)
+    });
+  } finally {
+    host.remove();
+  }
 }
 
 export async function exportPng(element, data) {
@@ -28,9 +52,18 @@ export async function exportPdf(element, data) {
   const imgData = canvas.toDataURL("image/png");
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "mm", "a4");
-  const width = pdf.internal.pageSize.getWidth();
-  const height = (canvas.height * width) / canvas.width;
-  pdf.addImage(imgData, "PNG", 0, 0, width, Math.min(height, 297));
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const imageRatio = canvas.width / canvas.height;
+  let imageWidth = pageWidth;
+  let imageHeight = pageWidth / imageRatio;
+  if (imageHeight > pageHeight) {
+    imageHeight = pageHeight;
+    imageWidth = pageHeight * imageRatio;
+  }
+  const x = (pageWidth - imageWidth) / 2;
+  const y = (pageHeight - imageHeight) / 2;
+  pdf.addImage(imgData, "PNG", x, y, imageWidth, imageHeight);
   pdf.save(`${getFileBase(data)}.pdf`);
 }
 
@@ -57,6 +90,16 @@ export function exportXlsx(data, counts) {
   const workbook = window.XLSX.utils.book_new();
   window.XLSX.utils.book_append_sheet(workbook, window.XLSX.utils.json_to_sheet(rows), "Estações");
   window.XLSX.utils.book_append_sheet(workbook, window.XLSX.utils.json_to_sheet(totals), "Totais");
+  workbook.Sheets[workbook.SheetNames[0]]["!cols"] = [
+    { wch: 24 },
+    { wch: 18 },
+    { wch: 14 },
+    { wch: 14 },
+    { wch: 14 },
+    { wch: 12 },
+    { wch: 12 }
+  ];
+  workbook.Sheets[workbook.SheetNames[1]]["!cols"] = [{ wch: 24 }, { wch: 10 }];
   window.XLSX.writeFile(workbook, `${getFileBase(data)}.xlsx`);
 }
 

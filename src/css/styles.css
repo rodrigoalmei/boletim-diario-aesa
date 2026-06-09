@@ -20,6 +20,7 @@ body {
   margin: 0;
   background: var(--app-bg);
   color: var(--text);
+  min-width: 320px;
 }
 
 button,
@@ -30,6 +31,7 @@ button,
   color: #fff;
   cursor: pointer;
   font-weight: 700;
+  min-height: 42px;
   padding: 0.7rem 0.9rem;
   text-align: center;
 }
@@ -99,7 +101,7 @@ label {
 .app-shell {
   display: grid;
   gap: 1.2rem;
-  grid-template-columns: minmax(340px, 430px) minmax(760px, 1fr);
+  grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
   padding: 1.2rem;
 }
 
@@ -187,6 +189,16 @@ label {
   display: flex;
   justify-content: center;
   overflow: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+.preview-viewport {
+  flex: 0 0 auto;
+  height: 1122px;
+  position: relative;
+  width: 794px;
 }
 
 @media (max-width: 1180px) {
@@ -195,7 +207,7 @@ label {
   }
 
   .preview-panel {
-    justify-content: flex-start;
+    justify-content: center;
   }
 }
 
@@ -208,11 +220,47 @@ label {
   .app-header {
     align-items: flex-start;
     flex-direction: column;
+    position: static;
+  }
+
+  .app-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .header-actions,
+  .action-grid,
+  .file-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .form-grid,
   .station-title,
   .inline-fields {
     grid-template-columns: 1fr;
+  }
+
+  .editor-panel section {
+    padding: 0.85rem;
+  }
+
+  .section-title-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .station-editor {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .preview-panel {
+    margin-left: -0.8rem;
+    margin-right: -0.8rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
   }
 }

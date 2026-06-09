@@ -8,6 +8,8 @@ let selectedStationId = state.stations[0]?.id || "";
 
 const elements = {
   bulletin: document.querySelector("#bulletin"),
+  previewPanel: document.querySelector(".preview-panel"),
+  previewViewport: document.querySelector(".preview-viewport"),
   stationEditor: document.querySelector("#stationEditor"),
   message: document.querySelector("#appMessage"),
   date: document.querySelector("#bulletinDate"),
@@ -28,6 +30,7 @@ function init() {
   fillSelects();
   bindGeneralForm();
   bindButtons();
+  bindResponsivePreview();
   loadIntoForm();
   renderAll();
 }
@@ -96,7 +99,24 @@ function renderAll(showMessage = false) {
   sanitizeState();
   renderStationEditor();
   renderBulletin();
+  resizePreview();
   if (showMessage) setMessage("Boletim atualizado.");
+}
+
+function bindResponsivePreview() {
+  window.addEventListener("resize", resizePreview);
+  window.addEventListener("orientationchange", resizePreview);
+}
+
+function resizePreview() {
+  if (!elements.previewPanel || !elements.previewViewport || !elements.bulletin) return;
+  const naturalWidth = 794;
+  const naturalHeight = 1122;
+  const availableWidth = Math.max(280, elements.previewPanel.clientWidth - 4);
+  const scale = Math.min(1, availableWidth / naturalWidth);
+  elements.bulletin.style.transform = `scale(${scale})`;
+  elements.previewViewport.style.width = `${naturalWidth * scale}px`;
+  elements.previewViewport.style.height = `${naturalHeight * scale}px`;
 }
 
 function sanitizeState() {

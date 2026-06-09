@@ -8,6 +8,12 @@
   width: 794px;
 }
 
+.preview-viewport .bulletin {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
 .bulletin-header {
   align-items: center;
   display: grid;
@@ -152,6 +158,38 @@
 .card-drought {
   background: linear-gradient(#ececec, #bababa);
   color: #333;
+}
+
+.bulletin-export .summary-card {
+  box-shadow: none;
+}
+
+.bulletin-export .card-total {
+  background: #cfe6ff;
+}
+
+.bulletin-export .card-normal {
+  background: #dcf3b7;
+}
+
+.bulletin-export .card-attention {
+  background: #ffd4ad;
+}
+
+.bulletin-export .card-alert {
+  background: #ffc4c4;
+}
+
+.bulletin-export .card-flood {
+  background: #c4312d;
+}
+
+.bulletin-export .card-nodata {
+  background: #bcecf7;
+}
+
+.bulletin-export .card-drought {
+  background: #d6d6d6;
 }
 
 .bulletin-block {
