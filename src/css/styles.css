@@ -188,8 +188,7 @@ label {
   align-items: start;
   display: flex;
   justify-content: center;
-  overflow: auto;
-  overscroll-behavior: contain;
+  overflow: visible;
   padding-bottom: 1rem;
   width: 100%;
 }
