@@ -222,7 +222,7 @@ function renderBulletin() {
       </div>
     </section>
     <section class="info-strip">
-      <div class="info-icon">⌁</div>
+      <div class="info-icon">⚠</div>
       <p>${escapeHtml(state.infoText)}</p>
     </section>
     <footer class="bulletin-footer">
