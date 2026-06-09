@@ -330,11 +330,13 @@ td {
 }
 
 .map-box {
-  aspect-ratio: 1 / 1.02;
   background: #edf4ef;
-  min-height: 388px;
+  height: var(--map-height, 388px);
+  margin: 0 auto;
+  min-height: 240px;
   overflow: hidden;
   position: relative;
+  width: var(--map-width, 100%);
 }
 
 .map-image,
@@ -410,6 +412,77 @@ td {
 .map-marker strong,
 .map-marker small {
   text-shadow: 0 1px 0 #fff;
+}
+
+.map-resize-handle {
+  background: #073876;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  min-height: 0;
+  opacity: 0.92;
+  padding: 0;
+  position: absolute;
+  touch-action: none;
+  z-index: 3;
+}
+
+.map-resize-handle:hover,
+.map-resize-handle:focus-visible {
+  background: #0a5795;
+  opacity: 1;
+}
+
+.is-resizing-map,
+.is-resizing-map * {
+  cursor: nwse-resize !important;
+  user-select: none;
+}
+
+.map-resize-right {
+  border-radius: 8px;
+  cursor: ew-resize;
+  height: 56px;
+  right: 4px;
+  top: calc(50% - 28px);
+  width: 12px;
+}
+
+.map-resize-bottom {
+  border-radius: 8px;
+  bottom: 4px;
+  cursor: ns-resize;
+  height: 12px;
+  left: calc(50% - 28px);
+  width: 56px;
+}
+
+.map-resize-corner {
+  border-radius: 50%;
+  bottom: 8px;
+  cursor: nwse-resize;
+  height: 30px;
+  right: 8px;
+  width: 30px;
+}
+
+.map-resize-corner::before,
+.map-resize-corner::after {
+  background: #fff;
+  content: "";
+  height: 2px;
+  position: absolute;
+  right: 7px;
+  transform: rotate(-45deg);
+}
+
+.map-resize-corner::before {
+  bottom: 9px;
+  width: 10px;
+}
+
+.map-resize-corner::after {
+  bottom: 14px;
+  width: 16px;
 }
 
 .legend-row {

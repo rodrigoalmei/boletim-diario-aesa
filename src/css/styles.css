@@ -184,6 +184,10 @@ label {
   margin: 0.8rem 0 0;
 }
 
+.map-size-control {
+  margin-top: 0.8rem;
+}
+
 .preview-panel {
   align-items: start;
   display: flex;

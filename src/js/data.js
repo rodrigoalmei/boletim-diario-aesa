@@ -61,6 +61,8 @@ export const DEFAULT_DATA = {
   logoAesa: "src/assets/logos/logo-aesa.png",
   logoGov: "src/assets/logos/logo-governo-paraiba.png",
   mapImage: "src/assets/maps/mapa-padrao.png",
+  mapWidth: 100,
+  mapHeight: 388,
   highlights: [
     "A estação Sítio Vassouras e Caraúbas encontra-se em nível de ALERTA",
     "A estação Sítio Vassouras encontra-se subindo o nível"

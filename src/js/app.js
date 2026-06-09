@@ -1,10 +1,10 @@
 import { DEFAULT_DATA, STATUS_OPTIONS, TREND_OPTIONS, cloneDefaultData } from "./data.js";
-import { bindMapPositioning, renderMap } from "./map.js";
+import { bindMapPositioning, bindMapResizing, renderMap } from "./map.js";
 import { exportDocx, exportPdf, exportPng, exportXlsx } from "./export.js";
 
 const STORAGE_KEY = "boletim-diario-aesa";
 let state = cloneDefaultData();
-let selectedStationId = state.stations[0]?.id || "";
+let selectedStationId = "";
 
 const elements = {
   bulletin: document.querySelector("#bulletin"),
@@ -21,7 +21,9 @@ const elements = {
   phone: document.querySelector("#phone"),
   email: document.querySelector("#email"),
   highlights: document.querySelector("#highlights"),
-  infoText: document.querySelector("#infoText")
+  infoText: document.querySelector("#infoText"),
+  mapWidth: document.querySelector("#mapWidth"),
+  mapHeight: document.querySelector("#mapHeight")
 };
 
 init();
@@ -30,6 +32,7 @@ function init() {
   fillSelects();
   bindGeneralForm();
   bindButtons();
+  bindKeyboardShortcuts();
   bindResponsivePreview();
   loadIntoForm();
   renderAll();
@@ -51,11 +54,13 @@ function bindGeneralForm() {
     ["contactName", "contactName"],
     ["phone", "phone"],
     ["email", "email"],
-    ["infoText", "infoText"]
+    ["infoText", "infoText"],
+    ["mapWidth", "mapWidth"],
+    ["mapHeight", "mapHeight"]
   ];
   bindings.forEach(([key, prop]) => {
     elements[key].addEventListener("input", () => {
-      state[prop] = elements[key].value;
+      state[prop] = prop === "mapWidth" || prop === "mapHeight" ? Number(elements[key].value) : elements[key].value;
       renderAll(false);
     });
   });
@@ -82,6 +87,14 @@ function bindButtons() {
   document.querySelector("#exportDocx").addEventListener("click", () => runExport(() => exportDocx(state, getCounts()), "DOCX gerado."));
 }
 
+function bindKeyboardShortcuts() {
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !selectedStationId) return;
+    selectedStationId = "";
+    renderAll();
+  });
+}
+
 function loadIntoForm() {
   elements.date.value = state.date;
   elements.time.value = state.time;
@@ -93,6 +106,8 @@ function loadIntoForm() {
   elements.email.value = state.email;
   elements.highlights.value = state.highlights.join("\n");
   elements.infoText.value = state.infoText;
+  elements.mapWidth.value = state.mapWidth;
+  elements.mapHeight.value = state.mapHeight;
 }
 
 function renderAll(showMessage = false) {
@@ -127,8 +142,12 @@ function sanitizeState() {
     station.x = Number.isFinite(Number(station.x)) ? Number(station.x) : 50;
     station.y = Number.isFinite(Number(station.y)) ? Number(station.y) : 50;
   });
+  state.mapWidth = clampMapWidth(state.mapWidth);
+  state.mapHeight = clampMapHeight(state.mapHeight);
+  elements.mapWidth.value = state.mapWidth;
+  elements.mapHeight.value = state.mapHeight;
   if (!state.stations.some((station) => station.id === selectedStationId)) {
-    selectedStationId = state.stations[0]?.id || "";
+    selectedStationId = "";
   }
 }
 
@@ -265,6 +284,15 @@ function renderBulletin() {
       renderAll();
     }
   );
+  bindMapResizing(document.querySelector("#mapBox"), { width: state.mapWidth, height: state.mapHeight }, ({ width, height }) => {
+    state.mapWidth = width;
+    state.mapHeight = height;
+    elements.mapWidth.value = width;
+    elements.mapHeight.value = height;
+    const mapBox = document.querySelector("#mapBox");
+    mapBox?.style.setProperty("--map-width", `${width}%`);
+    mapBox?.style.setProperty("--map-height", `${height}px`);
+  });
 }
 
 function summaryCard(label, value, className) {
@@ -372,7 +400,7 @@ function loadSavedData() {
 
 function resetData() {
   state = cloneDefaultData();
-  selectedStationId = state.stations[0]?.id || "";
+  selectedStationId = "";
   loadIntoForm();
   renderAll(true);
 }
@@ -406,8 +434,22 @@ function normalizeImported(data) {
   return {
     ...cloneDefaultData(),
     ...data,
+    mapWidth: clampMapWidth(data.mapWidth ?? data.mapScale ?? 100),
+    mapHeight: clampMapHeight(data.mapHeight),
     stations: Array.isArray(data.stations) ? data.stations : DEFAULT_DATA.stations
   };
+}
+
+function clampMapWidth(value) {
+  const width = Number(value);
+  if (!Number.isFinite(width)) return 100;
+  return Math.max(70, Math.min(100, Math.round(width)));
+}
+
+function clampMapHeight(value) {
+  const height = Number(value);
+  if (!Number.isFinite(height)) return 388;
+  return Math.max(240, Math.min(560, Math.round(height / 10) * 10));
 }
 
 async function runExport(action, successMessage) {
