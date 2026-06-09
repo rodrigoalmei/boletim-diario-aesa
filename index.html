@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boletim Diário AESA</title>
+    <link rel="stylesheet" href="src/css/styles.css" />
+    <link rel="stylesheet" href="src/css/boletim.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <span class="eyebrow">Sala de Situação</span>
+        <h1>Gerador de Boletim Diário AESA</h1>
+      </div>
+      <div class="header-actions">
+        <button id="saveData" type="button">Salvar dados</button>
+        <button id="loadData" type="button">Carregar salvos</button>
+        <button id="resetData" type="button">Restaurar modelo</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="editor-panel" aria-label="Painel de edição">
+        <section>
+          <h2>Dados do boletim</h2>
+          <div class="form-grid">
+            <label>
+              Data
+              <input id="bulletinDate" type="date" />
+            </label>
+            <label>
+              Horário
+              <input id="bulletinTime" type="time" />
+            </label>
+            <label>
+              Situação geral da rede
+              <select id="networkStatus"></select>
+            </label>
+            <label>
+              Fonte dos dados
+              <input id="dataSource" type="text" />
+            </label>
+          </div>
+
+          <label>
+            Destaques do dia
+            <textarea id="highlights" rows="4"></textarea>
+          </label>
+          <label>
+            Texto informativo
+            <textarea id="infoText" rows="5"></textarea>
+          </label>
+          <div class="form-grid">
+            <label>
+              Site
+              <input id="site" type="text" />
+            </label>
+            <label>
+              Sala de situação
+              <input id="contactName" type="text" />
+            </label>
+            <label>
+              Telefone
+              <input id="phone" type="text" />
+            </label>
+            <label>
+              E-mail
+              <input id="email" type="email" />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Logos e mapa</h2>
+          <div class="file-grid">
+            <label>
+              Trocar logo AESA
+              <input id="logoAesaInput" type="file" accept="image/*" />
+            </label>
+            <label>
+              Trocar logo Governo
+              <input id="logoGovInput" type="file" accept="image/*" />
+            </label>
+            <label>
+              Trocar mapa
+              <input id="mapInput" type="file" accept="image/*" />
+            </label>
+          </div>
+          <p class="hint">Clique no mapa da prévia depois de selecionar uma estação para posicionar o marcador.</p>
+        </section>
+
+        <section>
+          <div class="section-title-row">
+            <h2>Estações</h2>
+            <button id="addStation" type="button">Adicionar estação</button>
+          </div>
+          <div id="stationEditor" class="station-editor"></div>
+        </section>
+
+        <section>
+          <h2>Dados e exportação</h2>
+          <div class="action-grid">
+            <button id="updatePreview" type="button">Atualizar boletim</button>
+            <button id="downloadJson" type="button">Baixar JSON</button>
+            <label class="button-like">
+              Importar JSON
+              <input id="importJson" type="file" accept="application/json" />
+            </label>
+            <button id="exportPdf" type="button">Gerar PDF</button>
+            <button id="exportPng" type="button">Gerar PNG</button>
+            <button id="exportXlsx" type="button">Gerar XLSX</button>
+            <button id="exportDocx" type="button">Gerar DOCX</button>
+          </div>
+          <p id="appMessage" class="message" role="status"></p>
+        </section>
+      </aside>
+
+      <section class="preview-panel" aria-label="Prévia do boletim">
+        <div id="bulletin" class="bulletin"></div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+    <script type="module" src="src/js/app.js"></script>
+  </body>
+</html>
