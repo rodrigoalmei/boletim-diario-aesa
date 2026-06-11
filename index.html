@@ -14,9 +14,11 @@
         <h1>Gerador de Boletim Diário AESA</h1>
       </div>
       <div class="header-actions">
-        <button id="saveData" type="button">Salvar dados</button>
-        <button id="loadData" type="button">Carregar salvos</button>
+        <button id="saveData" type="button">Salvar modelo</button>
+        <button id="updatePreview" type="button">Atualizar boletim</button>
         <button id="resetData" type="button">Restaurar modelo</button>
+        <button id="exportPdf" type="button">Gerar PDF</button>
+        <button id="exportPng" type="button">Gerar PNG</button>
       </div>
     </header>
 
@@ -111,14 +113,6 @@
         <section>
           <h2>Dados e exportação</h2>
           <div class="action-grid">
-            <button id="updatePreview" type="button">Atualizar boletim</button>
-            <button id="downloadJson" type="button">Baixar JSON</button>
-            <label class="button-like">
-              Importar JSON
-              <input id="importJson" type="file" accept="application/json" />
-            </label>
-            <button id="exportPdf" type="button">Gerar PDF</button>
-            <button id="exportPng" type="button">Gerar PNG</button>
             <button id="exportXlsx" type="button">Gerar XLSX</button>
             <button id="exportDocx" type="button">Gerar DOCX</button>
           </div>

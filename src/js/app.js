@@ -30,6 +30,7 @@ init();
 
 function init() {
   fillSelects();
+  loadSavedData({ silent: true });
   bindGeneralForm();
   bindButtons();
   bindKeyboardShortcuts();
@@ -74,10 +75,7 @@ function bindButtons() {
   document.querySelector("#addStation").addEventListener("click", addStation);
   document.querySelector("#updatePreview").addEventListener("click", () => renderAll(true));
   document.querySelector("#saveData").addEventListener("click", saveData);
-  document.querySelector("#loadData").addEventListener("click", loadSavedData);
   document.querySelector("#resetData").addEventListener("click", resetData);
-  document.querySelector("#downloadJson").addEventListener("click", downloadJson);
-  document.querySelector("#importJson").addEventListener("change", importJson);
   document.querySelector("#logoAesaInput").addEventListener("change", (event) => readImage(event, "logoAesa"));
   document.querySelector("#logoGovInput").addEventListener("change", (event) => readImage(event, "logoGov"));
   document.querySelector("#mapInput").addEventListener("change", (event) => readImage(event, "mapImage"));
@@ -384,50 +382,29 @@ function readImage(event, key) {
 
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  setMessage("Dados salvos no navegador.");
+  setMessage("Modelo salvo no navegador.");
 }
 
-function loadSavedData() {
+function loadSavedData({ silent = false } = {}) {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (!saved) {
-    setMessage("Nenhum dado salvo encontrado.");
+    if (!silent) setMessage("Nenhum modelo salvo encontrado.");
     return;
   }
-  state = normalizeImported(JSON.parse(saved));
-  loadIntoForm();
-  renderAll(true);
+  try {
+    state = normalizeImported(JSON.parse(saved));
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+    if (!silent) setMessage("Modelo salvo inválido removido.");
+  }
 }
 
 function resetData() {
   state = cloneDefaultData();
   selectedStationId = "";
+  localStorage.removeItem(STORAGE_KEY);
   loadIntoForm();
   renderAll(true);
-}
-
-function downloadJson() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-  const link = document.createElement("a");
-  link.download = "dados-boletim-aesa.json";
-  link.href = URL.createObjectURL(blob);
-  link.click();
-  URL.revokeObjectURL(link.href);
-}
-
-function importJson(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.addEventListener("load", () => {
-    try {
-      state = normalizeImported(JSON.parse(reader.result));
-      loadIntoForm();
-      renderAll(true);
-    } catch {
-      setMessage("Não foi possível importar o JSON.");
-    }
-  });
-  reader.readAsText(file);
 }
 
 function normalizeImported(data) {

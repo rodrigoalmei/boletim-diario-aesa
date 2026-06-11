@@ -54,15 +54,12 @@ As contagens dos cards superiores, as cores dos marcadores e os selos da tabela 
 
 ## Trocar logos e mapa
 
-Use os campos **Trocar logo AESA**, **Trocar logo Governo** e **Trocar mapa**. As imagens são carregadas no navegador e podem ser salvas junto com os dados usando **Salvar dados**.
+Use os campos **Trocar logo AESA**, **Trocar logo Governo** e **Trocar mapa**. As imagens são carregadas no navegador e podem ser salvas junto com os dados usando **Salvar modelo**.
 
-## Salvar, carregar e importar dados
+## Salvar modelo
 
-- **Salvar dados** grava o boletim no `localStorage` do navegador.
-- **Carregar salvos** recupera o último boletim salvo.
-- **Restaurar modelo** volta aos dados iniciais do modelo.
-- **Baixar JSON** gera um arquivo com todos os dados.
-- **Importar JSON** carrega dados exportados anteriormente.
+- **Salvar modelo** grava o boletim no `localStorage` do navegador e ele será carregado automaticamente ao abrir a página.
+- **Restaurar modelo** volta aos dados iniciais do modelo e remove o modelo salvo no navegador.
 
 ## Exportações
 
