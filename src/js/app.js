@@ -394,15 +394,13 @@ function loadSavedData({ silent = false } = {}) {
   try {
     state = normalizeImported(JSON.parse(saved));
   } catch {
-    localStorage.removeItem(STORAGE_KEY);
-    if (!silent) setMessage("Modelo salvo inválido removido.");
+    if (!silent) setMessage("Não foi possível carregar o modelo salvo.");
   }
 }
 
 function resetData() {
   state = cloneDefaultData();
   selectedStationId = "";
-  localStorage.removeItem(STORAGE_KEY);
   loadIntoForm();
   renderAll(true);
 }
