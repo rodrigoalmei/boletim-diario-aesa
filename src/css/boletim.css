@@ -214,16 +214,13 @@
 }
 
 .highlights-block h3 {
-  left: 6px;
   min-width: 170px;
-  position: absolute;
   text-transform: none;
-  top: -31px;
 }
 
 .highlights-block ul {
   list-style: none;
-  margin: 20px 18px 18px;
+  margin: 16px 18px 18px;
   min-height: 58px;
   padding: 0;
 }
